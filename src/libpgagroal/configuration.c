@@ -440,7 +440,7 @@ pgagroal_validate_configuration(void* shm, bool has_unix_socket, bool has_main_s
       config->backlog = MAX(config->max_connections / 4, 16);
    }
 
-   if (config->common.authentication_timeout <= 0)
+   if (config->common.authentication_timeout == 0)
    {
       config->common.authentication_timeout = DEFAULT_AUTHENTICATION_TIMEOUT;
    }
@@ -934,7 +934,7 @@ pgagroal_vault_validate_configuration (void* shm)
       return 1;
    }
 
-   if (config->common.authentication_timeout < 0)
+   if (config->common.authentication_timeout == 0)
    {
       config->common.authentication_timeout = DEFAULT_AUTHENTICATION_TIMEOUT;
    }
@@ -1402,7 +1402,7 @@ error:
  *
  */
 int
-pgagroal_validate_users_configuration(void* shm)
+pgagroal_validate_users_configuration(void* shm __attribute__((unused)))
 {
    return 0;
 }
@@ -1912,7 +1912,7 @@ error:
  *
  */
 int
-pgagroal_validate_superuser_configuration(void* shm)
+pgagroal_validate_superuser_configuration(void* shm __attribute__((unused)))
 {
    return 0;
 }
@@ -2219,7 +2219,7 @@ extract_syskey_value(char* str, char** key, char** value)
    {
       goto error;
    }
-   
+
    for (int i = 0; i < c; i++)
    {
       k = pgagroal_append_char(k, str[i]);
@@ -3055,7 +3055,7 @@ restart_string(char* name, char* e, char* n, bool skip_non_existing)
 }
 
 static int
-restart_limit(char* name, struct main_configuration* config, struct main_configuration* reload)
+restart_limit(char* name __attribute__((unused)), struct main_configuration* config, struct main_configuration* reload)
 {
    int ret;
 
@@ -3133,7 +3133,7 @@ is_empty_string(char* s)
       return true;
    }
 
-   for (int i = 0; i < strlen(s); i++)
+   for (unsigned long i = 0; i < strlen(s); i++)
    {
       if (s[i] == ' ' || s[i] == '\t' || s[i] == '\r' || s[i] == '\n')
       {
@@ -3356,7 +3356,7 @@ as_seconds(char* str, unsigned int* age, unsigned int default_age)
    }
 
    index = 0;
-   for (int i = 0; i < strlen(str); i++)
+   for (unsigned long i = 0; i < strlen(str); i++)
    {
       if (isdigit(str[i]))
       {
@@ -3461,7 +3461,7 @@ as_bytes(char* str, unsigned int* bytes, unsigned int default_bytes)
    }
 
    index = 0;
-   for (int i = 0; i < strlen(str); i++)
+   for (unsigned long i = 0; i < strlen(str); i++)
    {
       if (isdigit(str[i]))
       {
@@ -3600,7 +3600,7 @@ pgagroal_write_config_value(char* buffer, char* config_key, size_t buffer_size)
    memset(context, 0, MISC_LENGTH);
    memset(key, 0, MISC_LENGTH);
 
-   for (int i = 0; i < strlen(config_key); i++)
+   for (unsigned long i = 0; i < strlen(config_key); i++)
    {
       if (config_key[i] == '.')
       {
@@ -4145,7 +4145,7 @@ to_string(char* where, char* value, size_t max_length)
    }
 
    // assume strings with spaces must be quoted
-   for (int i = 0; i < strlen(value); i++)
+   for (unsigned long i = 0; i < strlen(value); i++)
    {
       if (value[i] == ' ')
       {
@@ -5075,7 +5075,7 @@ pgagroal_apply_configuration(char* config_key, char* config_value)
    memset(context, 0, MISC_LENGTH);
    memset(key, 0, MISC_LENGTH);
 
-   for (int i = 0; i < strlen(config_key); i++)
+   for (unsigned long i = 0; i < strlen(config_key); i++)
    {
       if (config_key[i] == '.')
       {
@@ -5494,7 +5494,7 @@ add_servers_configuration_response(struct json* res)
 }
 
 void
-pgagroal_conf_get(SSL* ssl, int client_fd, uint8_t compression, uint8_t encryption, struct json* payload)
+pgagroal_conf_get(SSL* ssl __attribute__((unused)), int client_fd, uint8_t compression, uint8_t encryption, struct json* payload)
 {
    struct json* response = NULL;
    char* elapsed = NULL;
@@ -5549,7 +5549,7 @@ error:
 }
 
 void
-pgagroal_conf_set(SSL* ssl, int client_fd, uint8_t compression, uint8_t encryption, struct json* payload)
+pgagroal_conf_set(SSL* ssl __attribute__((unused)), int client_fd, uint8_t compression, uint8_t encryption, struct json* payload)
 {
    struct json* response = NULL;
    struct json* request = NULL;
@@ -5595,7 +5595,7 @@ pgagroal_conf_set(SSL* ssl, int client_fd, uint8_t compression, uint8_t encrypti
    memset(section, 0, MISC_LENGTH);
    memset(key, 0, MISC_LENGTH);
 
-   for (int i = 0; i < strlen(config_key); i++)
+   for (unsigned long i = 0; i < strlen(config_key); i++)
    {
       if (config_key[i] == '.')
       {

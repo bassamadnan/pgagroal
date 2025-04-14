@@ -1130,7 +1130,7 @@ parse_command(int argc,
       subcommand = argv[offset];
    }
 
-   for (int i = 0; i < command_count; i++)
+   for (size_t i = 0; i < command_count; i++)
    {
       if (strncmp(command, command_table[i].command, MISC_LENGTH) == 0)
       {
